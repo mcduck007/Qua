@@ -63,3 +63,17 @@ lines(spxnw,col=9,lty=5,lwd=2)
 
 legend("topleft",leg,text.col=c(1:9),horiz=TRUE)
 
+####Changepoint Analysis
+#install.packages('changepoint')
+library(changepoint)
+
+#Change point for gld using MeanVar and PELT
+#need to fix the date formatting somehow
+chg.gld=cpt.meanvar(as.ts(gldnw,start=head(index(gldnw),1),end=tail(index(gldnw),1)),method='PELT')
+plot(chg.gld)
+
+#get changepoints index values
+cpts(chg.gld)
+#extract dates from the index values
+na.omit(index(gldnw)[cpts(chg.gld)])
+
