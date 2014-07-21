@@ -33,6 +33,8 @@ getSymbols("BRL/USD",src="oanda")
 getSymbols("RUB/USD", src="oanda")
 
 getSymbols("^GSPC", src = "yahoo")
+getSymbols('DJIA',src='FRED')
+getSymbols('SP500',src='FRED')
 
 
 gldnw=nrmw.com(XAUUSD,0)
@@ -67,13 +69,58 @@ legend("topleft",leg,text.col=c(1:9),horiz=TRUE)
 #install.packages('changepoint')
 library(changepoint)
 
-#Change point for gld using MeanVar and PELT
+#Change point for gld using 
 #need to fix the date formatting somehow
-chg.gld=cpt.meanvar(as.ts(gldnw,start=head(index(gldnw),1),end=tail(index(gldnw),1)),method='PELT')
+#MeanVar and PELT
+chg.gld=cpt.meanvar(head
+                    (as.ts(gldnw,
+                           start=head(index(gldnw),1),
+                           end=tail(index(gldnw),1)),
+                     length(gldnw)),
+                    method='PELT')
 plot(chg.gld)
+
+
+
 
 #get changepoints index values
 cpts(chg.gld)
 #extract dates from the index values
 na.omit(index(gldnw)[cpts(chg.gld)])
+
+#test for FRED's data
+getSymbols('GOLDPMGBD228NLBM',src='FRED')
+getSymbols('DJIA',src='FRED')
+
+
+# this isnt working (err: missing values, most likely due to uneven time periods)
+chg.gld2=cpt.meanvar(head(
+  na.exclude(as.ts(
+    to.yearly(GOLDPMGBD228NLBM),
+    start=head(index(to.yearly(GOLDPMGBD228NLBM)),1),
+    end=tail(index(to.yearly(GOLDPMGBD228NLBM)),1))),
+  length(na.exclude(to.yearly(GOLDPMGBD228NLBM)))),
+  method='PELT')
+
+plot(chg.gld2)
+
+#Trading Strategy 1
+#Buy low sell high
+
+
+#Create a retuns vector based on opaning cna closing prices
+ret.spy=Delt(Op(x = GSPC),Cl(x = GSPC))
+
+# Signal Vector based on the prce changes increase => 1 else 0 and lag it by one period
+sgnl.spy=lag(ifelse(Cl(GSPC)>Op(GSPC),1,0),1)
+
+#performance matrix by multiplying returns to signal
+strat.perf=ret.spy*sgnl.spy
+  
+#check the cumulative return??
+
+#try another signal
+sgnl.spy2=ifelse(((Cl(GSPC)>Op(GSPC))),1,0)*
+  ifelse(lag(Cl(GSPC),1)>lag(Op(GSPC),1),1,0)*
+  ifelse(lag(Cl(GSPC),2)>lag(Op(GSPC),2),1,0)
 
