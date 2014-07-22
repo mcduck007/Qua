@@ -105,6 +105,8 @@ chg.gld2=cpt.meanvar(head(
 plot(chg.gld2)
 
 #Trading Strategy 1
+library(PerformanceAnalytics)
+
 #Buy low sell high
 
 
@@ -123,4 +125,18 @@ strat.perf=ret.spy*sgnl.spy
 sgnl.spy2=ifelse(((Cl(GSPC)>Op(GSPC))),1,0)*
   ifelse(lag(Cl(GSPC),1)>lag(Op(GSPC),1),1,0)*
   ifelse(lag(Cl(GSPC),2)>lag(Op(GSPC),2),1,0)
+
+#number of trades
+sum(sgnl.spy2)
+
+#plot performance summary
+charts.PerformanceSummary(ret.spy*sgnl.spy2)
+
+#Using SMA
+sma.spy.30d.hi=SMA(Hi(GSPC),30)
+sma.spy.30d.lo=SMA(Lo(GSPC),30)
+sgnl.spy3=lag(ifelse(Cl(GSPC)>sma.spy.30d.hi,1,0)+ifelse(Cl(GSPC)<sma.spy.30d.lo,-1,0),1)
+#remove NAs
+sgnl.spy3[is.na(sgnl.spy3)]=0
+
 
