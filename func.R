@@ -15,6 +15,8 @@ nrmw.com=function(x,y){
   return(tmp1)
 }
 
+#
+
 #Download Data
 # install quantmod 
 #install.packages('quantmod')
