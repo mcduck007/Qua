@@ -14,6 +14,7 @@ dvi <- DVI(Cl(GSPC))
 sig <- Lag(ifelse(dvi$dvi < 0.5, 1, -1))
 
 # Step 4: The trading rules/equity curve
+ret <- ROC(Cl(GSPC))*sig
 ret <- ret['2009-06-02/2010-09-07']
 eq <- exp(cumsum(ret))
 plot(eq)
