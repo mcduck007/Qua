@@ -13,6 +13,7 @@ dvi <- DVI(Cl(GSPC))
 # Step 3: Construct your trading rule
 sig <- Lag(ifelse(dvi$dvi < 0.5, 1, -1))
 
+ret <- ROC(Cl(GSPC))*sig
 # Step 4: The trading rules/equity curve
 ret <- ROC(Cl(GSPC))*sig
 ret <- ret['2009-06-02/2010-09-07']
