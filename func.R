@@ -35,6 +35,7 @@ getSymbols("BRL/USD",src="oanda")
 getSymbols("RUB/USD", src="oanda")
 
 getSymbols("^GSPC", src = "yahoo")
+getSymbols("AMD", src = "yahoo")
 getSymbols('DJIA',src='FRED')
 getSymbols('SP500',src='FRED')
 
