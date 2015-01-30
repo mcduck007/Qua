@@ -2,4 +2,26 @@
 #
 #
 
-require("quantmod")   <br>                                                           <br>getSymbols("TLT")   <br>                                       <br>TLT$fast  <- BBands(( TLT[,4]), n=10, sd=0.5)                                            <br>TLT$slow  <- BBands(( TLT[,4] ), n=30, sd=0.5)                   <br>TLT       <- na.omit(TLT)                                                                <br><br>signal    <- ifelse (TLT$mavg > TLT$up.1, 1,                                          <br>              ifelse(TLT$mavg < TLT$dn.1, -1, NA))                                                                                                           <br>signal    <- na.locf(signal, na.rm=TRUE)                                                <br>                                                                                 <br>returns   <- na.omit(Lag(dailyReturn(Cl(TLT))*signal))                               <br>                                                                                 <br>equity    <- cumprod(1+returns)                                                       <br>                                                                                 <br>equity_10 <- SMA(equity)                              <br>equity_20 <- SMA(equity, n=30)                        <br>equity_TA <- na.omit(merge(equity_10, equity_20))     <br><br>recursion <- na.omit(merge(signal, equity_TA))<br><br>SIGNAL    <- ifelse(recursion$equity_10 > recursion$equity_20, recursion$mavg, 0)<br>SIGNAL    <- na.omit(SIGNAL)<br><br>RETURNS   <- na.omit(Lag(dailyReturn(Cl(TLT))*SIGNAL))    <br>                                                         <br>EQUITY    <- cumprod(1+RETURNS)       <br><br>plot(equity, main="white bumblebee")<br>plot(EQUITY, main="with equity curve filter")
+require("quantmod")
+
+getSymbols("TLT")
+TLT$fast  <- BBands(( TLT[,4]), n=10, sd=0.5)
+TLT$slow  <- BBands(( TLT[,4] ), n=30, sd=0.5)
+TLT       <- na.omit(TLT)
+signal    <- ifelse (TLT$mavg > TLT$up.1, 1,
+                     ifelse(TLT$mavg < TLT$dn.1, -1, NA))
+signal    <- na.locf(signal, na.rm=TRUE)
+returns   <- na.omit(Lag(dailyReturn(Cl(TLT))*signal))
+equity    <- cumprod(1+returns)
+equity_10 <- SMA(equity)
+equity_20 <- SMA(equity, n=30)
+equity_TA <- na.omit(merge(equity_10, equity_20))
+recursion <- na.omit(merge(signal, equity_TA))
+
+SIGNAL    <- ifelse(recursion$equity_10 > recursion$equity_20, recursion$mavg, 0)
+SIGNAL    <- na.omit(SIGNAL)
+RETURNS   <- na.omit(Lag(dailyReturn(Cl(TLT))*SIGNAL))
+EQUITY    <- cumprod(1+RETURNS)
+
+plot(equity, main="white bumblebee")
+plot(EQUITY, main="with equity curve filter")
