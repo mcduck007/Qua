@@ -23,100 +23,139 @@ nrmd.com=function(x,y){
   return(tmp1)
 }
 
+### 
 
-#Libraries
+##Number of Observations per Column
+
+#Weekly data for 5 years, 52weeks*5=260 + 5 "a few extra", 
+#Days for 7 day weeks for 5years and 5 more weeks = 1855
+#Days for 5 day weeks for 5years and 5 more weeks = 1355
+
+
+weeks=265
+#Daily=1855
+
+
+
+###
+###
+
+
+###Libraries
 
 library(quantmod)
 library(ggplot2)
 library(dplyr)
+library(tidyr)
 
-#get Data
+####get Data
 
 
-# Stock Market
+#### Stock Market
 
 getSymbols("^GSPC", src = "yahoo")
 getSymbols('DJIA', src = 'FRED')
 getSymbols('SP500', src = 'FRED')
 
-#Commodities
+###Commodities
 
 #CBOE Volatility Index: VIX Daily
 getSymbols('VIXCLS',src='FRED')
 
 # Crude Oil Prices: West Texas Intermediate (WTI) - Cushing, Oklahoma
 getSymbols('DCOILWTICO',src='FRED')
+WTI = DCOILWTICO
+rm(DCOILWTICO)
+
+
 
 #Crude Oil Prices: Brent - Europe
 getSymbols('DCOILBRENTEU',src='FRED')
+BRENT=DCOILBRENTEU
+rm(DCOILBRENTEU)
 
 #CBOE Crude Oil ETF Volatility Index
 getSymbols('OVXCLS',src='FRED')
+CrudeVix=OVXCLS
+rm(OVXCLS)
 
 #Gas Prices 
 getSymbols('GASREGW',src='FRED')
-
+Gas=GASREGW
+rm(GASREGW)
 
 #Export (Harmonized System): Corn (maize)
 getSymbols('ID1005',src='FRED')
+Maize=ID1005
+rm(ID1005)
 
 #Gold Fixing Price 3:00 P.M. (London time) in London Bullion Market, based in U.S. Dollars
 getSymbols('GOLDPMGBD228NLBM',src='FRED')
-
+Gold=GOLDPMGBD228NLBM
+rm(GOLDPMGBD228NLBM)
 
 #Currencies
 
 #US Euro
 getSymbols('DEXUSEU',src='FRED')
-tmp=1/DEXUSEU
+Eur=1/DEXUSEU
 rm(DEXUSEU)
-names(tmp)='Eur'
 
 #US Japan
 getSymbols('DEXJPUS',src='FRED')
-names(DEXJPUS)='Jpy'
+Jpy=(DEXJPUS)
+rm(DEXJPUS)
 
 #US China
 getSymbols('DEXCHUS',src='FRED')
-names(DEXCHUS)='Chn'
+Chn=(DEXCHUS)
+rm(DEXCHUS)
 
 #US UK
 getSymbols('DEXUSUK',src='FRED')
-tmp=1/DEXUSUK
+Uk=1/DEXUSUK
 rm(DEXUSUK)
-names(tmp)='Uk'
 
 #US India
 getSymbols('DEXINUS',src='FRED')
-names(DEXINUS)='Inr'
+Inr=(DEXINUS)
+rm(DEXINUS)
 
 #US Taiwan
 getSymbols('DEXTAUS',src='FRED')
-names(DEXTAUS)='Tai'
+Tai=(DEXTAUS)
+rm(DEXTAUS)
 
 #US S Korea
 getSymbols('DEXKOUS',src='FRED')
-names(DEXKOUS)='Skr'
+Skr=(DEXKOUS)
+rm(DEXKOUS)
 
 #US Singapore
 getSymbols('DEXSIUS',src='FRED')
-names(DEXSIUS)='Sgn'
+Sgp(DEXSIUS)
+rm(DEXSIUS)
 
 #US Australia
 getSymbols('DEXUSAL',src='FRED')
-tmp=1/DEXUSAL
+Aud=1/DEXUSAL
 rm(DEXUSAL)
-names(tmp)='Aus'
 
 
 # Economic Data
 
 #Real Disposable Income
 getSymbols('DSPIC96',src='FRED')
+IncDisp=DSPIC96
+rm(DSPIC96)
 
 #30-Year Fixed Rate Mortgage Average in the United States©
 getSymbols('MORTGAGE30US',src='FRED')
+Mort30y=MORTGAGE30US
+rm(MORTGAGE30US)
 
 #Moving 12-Month Total Vehicle Miles Traveled
 getSymbols('M12MTVUSM227NFWA',src='FRED')
+Miles12mth=M12MTVUSM227NFWA
+rm(M12MTVUSM227NFWA)
 
