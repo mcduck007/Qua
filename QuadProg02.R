@@ -5,12 +5,14 @@
 
 # Get monthly return data from 2012 through 2013
 require(quantmod)
-myStocks <- c("AAPL","XOM","GOOGL","MSFT","GE","JNJ","WMT","CVX","PG","WF")
+myStocks <- c("BAC","AAPL","HAS","XOM","ZMH",'GOOG','MSFT')
 getSymbols(myStocks ,src='yahoo')
 returnsList <- lapply(myStocks, 
-                      function(s) periodReturn(eval(parse(text=s)),
-                                               period='monthly', 
-                                               subset='2012::2013'))
+                      function(s) periodReturn(
+                        eval(parse(text=s)),
+                        period='weekly',
+                        subset='2013::2015')
+                      )
 
 # Combine return time series
 returns.df  <- do.call(cbind,returnsList)
@@ -34,10 +36,15 @@ C <- cov(returns.df)
 
 # Stage and solve the QP
 require(quadprog)
-A    <- matrix(1,1,10)
-A    <- rbind(A, r, diag(10),-diag(10))
-f    <- c(1, 0.01, rep(0,10),rep(-1,10))
-sol  <- solve.QP(Dmat=C, dvec = rep(0,10), Amat=t(A), bvec=f, meq=1)
+A    <- matrix(1,1,length(myStocks))
+A    <- rbind(A, r, diag(length(myStocks)),-diag(length(myStocks)))
+f    <- c(1, 0.01, rep(0,length(myStocks)),rep(-1,length(myStocks)))
+sol  <- solve.QP(Dmat=C, 
+                 dvec = rep(0,length(myStocks)), 
+                 Amat=t(A), 
+                 bvec=f, 
+                 meq=1
+                 )
 
 
 ###

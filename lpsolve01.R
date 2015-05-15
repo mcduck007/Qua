@@ -1,5 +1,6 @@
 #####
-
+#
+#####
 
 library(lpSolveAPI)
 
@@ -10,9 +11,16 @@ library(gridExtra)
 
 #define the datasets
 
-train<-data.frame(wagon=c('w1','w2','w3'), weightcapacity=c(10,8,12), spacecapacity=c(5000,4000,8000))
+train<-data.frame(wagon=c('w1','w2','w3'), 
+                  weightcapacity=c(10,8,12), 
+                  spacecapacity=c(5000,4000,8000)
+                  )
 
-cargo<-data.frame(type=c('c1','c2','c3','c4'), available=c(18,10,5,20), volume=c(400,300,200,500),profit=c(2000,2500,5000,3500))
+cargo<-data.frame(type=c('c1','c2','c3','c4'), 
+                  available=c(18,10,5,20), 
+                  volume=c(400,300,200,500),
+                  profit=c(2000,2500,5000,3500)
+                  )
 
 ######
 
